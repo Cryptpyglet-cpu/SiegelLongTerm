@@ -519,6 +519,16 @@
     .chart-title { font-size: 24px; }
     .article p:first-of-type::first-letter { font-size: 3.6em; }
   }
+  @media (max-width: 600px) {
+    .hero { padding: 40px 18px 36px; }
+    .hero-image-row, section.block, .chart-inner, .foot-inner, .foot-base { padding-left: 18px; padding-right: 18px; }
+    h1.hero-title { font-size: 36px; }
+    .section-title { font-size: 24px; }
+    .chart-title { font-size: 18px; }
+    /* スマホ縦画面: チャートを縦長に */
+    .chart-placeholder { aspect-ratio: 3 / 4; }
+    .chart-foot { gap: 20px; }
+  }
 </style>
 </head>
 <body>
@@ -659,7 +669,7 @@
 
       <!-- ▼▼▼ DYNAMIC CHART INJECTION POINT #1 ▼▼▼ -->
       <div class="chart-placeholder" id="chart-1" data-chart="long-term-returns">
-        <iframe src="chart_usd.html" title="長期資産リターン比較（米国・USD実質）" loading="lazy"></iframe>
+        <iframe src="index.html" title="長期資産リターン比較（米国・USD実質）" loading="lazy"></iframe>
       </div>
       <!-- ▲▲▲ END CHART #1 ▲▲▲ -->
 
@@ -685,7 +695,7 @@
 
       <!-- ▼▼▼ DYNAMIC CHART INJECTION POINT #2 ▼▼▼ -->
       <div class="chart-placeholder" id="chart-2" data-chart="holding-period-risk">
-        <iframe src="chart_jpy.html" title="長期資産リターン比較（日本・JPY実質）" loading="lazy"></iframe>
+        <iframe src="index_jpy.html" title="長期資産リターン比較（日本・JPY実質）" loading="lazy"></iframe>
       </div>
       <!-- ▲▲▲ END CHART #2 ▲▲▲ -->
 
@@ -728,19 +738,4 @@
           <li>
             <span class="yr">—</span>
             <span class="ttl">
-              The Wharton School, University of Pennsylvania
-              <span class="auth">著者所属機関 ／ 公開講義・論文</span>
-            </span>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="foot-base">
-      <span>長期投資の王道 — Siegel Edition</span>
-      <span>本ページは教育目的の解説資料です。投資判断はご自身の責任で。</span>
-    </div>
-  </footer>
-
-</body>
-</html>
+              Th

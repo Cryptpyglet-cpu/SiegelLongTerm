@@ -9,7 +9,7 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{width:100%;height:100%;background:#fff;font-family:"Hiragino Sans","Yu Gothic","Meiryo",sans-serif;font-size:13px;color:#222;overflow:hidden}
   .wrap{display:flex;flex-direction:column;height:100%;padding:10px 16px 8px;gap:4px}
-  h2{font-size:13.5px;font-weight:bold;color:#111}
+  h2{font-size:13.5px;font-weight:bold;color:#111;line-height:1.4}
   .note-box{background:#fffbe6;border-left:4px solid #e0b800;padding:6px 10px;font-size:10.5px;color:#555;line-height:1.6;border-radius:2px}
   .note-box strong{color:#333}
   .controls{display:flex;flex-direction:column;gap:3px}
@@ -17,15 +17,31 @@
   .ctrl-row label{width:80px;flex-shrink:0;color:#444}
   .ctrl-row input[type=range]{flex:1;accent-color:#3a6fd8;cursor:pointer}
   .year-val{font-weight:bold;color:#e03030;min-width:36px}
-  .chart-subtitle{text-align:center;font-size:11px;color:#555}
-  .legend-wrap{display:flex;flex-wrap:wrap;gap:4px 12px;justify-content:center}
-  .leg{display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;padding:2px 6px;border-radius:3px;user-select:none;transition:opacity .15s}
+  .chart-subtitle{text-align:center;font-size:11px;color:#555;line-height:1.5}
+  .legend-wrap{display:flex;flex-wrap:wrap;gap:4px 8px;justify-content:center}
+  .leg{display:flex;align-items:center;gap:4px;font-size:11px;cursor:pointer;padding:2px 5px;border-radius:3px;user-select:none;transition:opacity .15s}
   .leg:hover{background:#f0f0f0}
   .leg.hidden{opacity:.3;text-decoration:line-through}
-  .leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
   .leg-badge{font-size:9px;color:#888;border:1px solid #ccc;border-radius:2px;padding:0 3px;margin-left:2px}
   .chart-area{flex:1;position:relative;min-height:0}
   canvas{position:absolute;inset:0;width:100%!important;height:100%!important}
+  /* スマホ縦画面 */
+  @media (max-width:480px) and (orientation:portrait), (max-width:480px) {
+    html,body{font-size:11px;overflow:auto}
+    .wrap{height:auto;min-height:100vh;padding:8px 10px 6px;gap:3px}
+    h2{font-size:11px}
+    .note-box{font-size:9.5px;padding:5px 8px}
+    .ctrl-row label{width:64px;font-size:11px}
+    .ctrl-row{gap:5px;font-size:11px}
+    .year-val{min-width:30px;font-size:11px}
+    .chart-subtitle{font-size:10px}
+    .leg{font-size:10px;padding:2px 4px}
+    .leg-dot{width:8px;height:8px}
+    .leg-badge{font-size:8px}
+    .chart-area{min-height:260px;height:55vw}
+    canvas{position:absolute}
+  }
 </style>
 </head>
 <body>
@@ -190,26 +206,4 @@ SERIES_DEF.forEach((d,i)=>{
 function refreshChart() {
   const si=sy-1950, ei=ey-1950+1;
   const slices = getSlice(sy, ey);
-  myChart.data.labels = allYears.slice(si, ei);
-  SERIES_DEF.forEach((_,i)=>{
-    myChart.data.datasets[i].data   = slices[i];
-    myChart.data.datasets[i].hidden = hidden.has(i);
-  });
-  myChart.update('none');
-}
-
-document.getElementById('startSlider').addEventListener('input', e=>{
-  sy = parseInt(e.target.value);
-  if(sy >= ey){ sy=ey-1; e.target.value=sy; }
-  document.getElementById('startLabel').textContent = sy;
-  refreshChart();
-});
-document.getElementById('endSlider').addEventListener('input', e=>{
-  ey = parseInt(e.target.value);
-  if(ey <= sy){ ey=sy+1; e.target.value=ey; }
-  document.getElementById('endLabel').textContent = ey;
-  refreshChart();
-});
-</script>
-</body>
-</html>
+  myChart.data.labels = allYe
