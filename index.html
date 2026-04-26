@@ -505,6 +505,47 @@
     letter-spacing: 0.04em;
   }
 
+  /* ---------- CHART COMPARISON TABLE ---------- */
+  .comparison-table-wrap {
+    margin: 40px 0;
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+  }
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    font-family: var(--sans);
+  }
+  .comparison-table thead tr {
+    background: var(--bg-soft);
+    border-bottom: 2px solid var(--rule);
+  }
+  .comparison-table th {
+    padding: 14px 18px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .comparison-table td {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink-soft);
+    vertical-align: middle;
+    line-height: 1.55;
+  }
+  .comparison-table tr:last-child td { border-bottom: none; }
+  .comparison-table tr.row-sep td { border-top: 2px solid var(--rule); }
+  .comparison-table td:first-child { font-weight: 600; color: var(--ink); }
+  .num-cell { font-family: var(--display); font-size: 16px; color: var(--ink); white-space: nowrap; }
+  .red-cell { color: #b03020; }
+  .td-sub { display: block; font-size: 11px; font-weight: 400; color: var(--ink-muted); margin-top: 2px; }
+
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; gap: 36px; padding: 64px 28px 56px; }
@@ -529,6 +570,8 @@
     .chart-placeholder { aspect-ratio: 3 / 4; }
     .chart-foot { gap: 20px; }
   }
+  .subsection-title{font-size:1rem;font-weight:500;color:var(--ink);margin:1.6rem 0 0.5rem;letter-spacing:0.01em}
+  .note-small{font-size:0.78rem;color:var(--ink-muted);line-height:1.65;margin-top:1.5rem;padding:0.75rem 1rem;border-left:2px solid var(--rule);background:var(--paper-tint, #faf9f7)}
 </style>
 </head>
 <body>
@@ -708,6 +751,116 @@
     </div>
   </section>
 
+  <!-- SECTION: CHART COMPARISON -->
+  <section class="block" id="chart-comparison">
+    <div class="section-head">
+      <div class="section-num">Note</div>
+      <div>
+        <h2 class="section-title">
+          2つのグラフの読み方
+          <span class="section-title-en">USD Real vs. JPY Real — What the Numbers Mean</span>
+        </h2>
+      </div>
+    </div>
+
+    <div class="article">
+      <p>2つのグラフを見比べると、<strong>米国株・米国債・金など6つの系列はまったく同じ動き</strong>をしています。これらはドルで測った数字なので、どちらのグラフでも変わりません。</p>
+
+      <p>大きく違うのは<strong>日経225（日本株）と10年JGB（日本国債）の2つだけ</strong>です。なぜ違うのか、一言でいえば<strong>「円とドルの交換レート（為替）が変わったから」</strong>です。</p>
+
+      <div class="pull-quote">
+        1ドル＝360円の時代に日本株を買ったアメリカ人は、<br>株が上がっただけでなく「円高」でも得をした。<br>それが2つのグラフの差として現れている。
+        <div class="pull-quote-attr">— 為替が生み出す「見えないリターン」</div>
+      </div>
+
+      <p><strong>日経225のバブルピーク（1989年）</strong>を例に取ると、USD実質グラフでは約410倍ですが、JPY実質グラフでは約105倍です。この約4倍の差はどこから来るのでしょうか。答えはシンプルで、1950年に「1ドル＝360円」だったレートが、1989年には「1ドル＝143円」に変わったこと、つまり<strong>円が約2.5倍の価値になった</strong>からです。アメリカ人の目線では、日本株の値上がり益にプラスして「円高による換算益」も乗っかるため、数字が大きくなります。JPY実質グラフは日本のインフレ率だけで調整するので、この為替の影響は含まれません。</p>
+
+      <p><strong>10年JGB（日本国債）の差はさらに極端です。</strong>1985年時点でUSD実質は約12.5倍なのに対し、JPY実質はわずか1.18倍です。JPY実質で見ると、1970年代のオイルショック（物価が年20%以上も上がった時代）に国債の実質的な価値がじわじわと目減りしていました。USD実質では、その損失を円高の追い風が帳消しにしていたわけです。逆に2012年以降は「アベノミクス」で円安が急速に進んだ（1ドル80円台→130円超）ため、USD実質のJGBは2022年に約12.5倍まで急落しています。</p>
+
+      <table class="comparison-table-wrap">
+        <thead>
+          <tr>
+            <th>系列</th>
+            <th>時点</th>
+            <th>グラフ①　USD実質</th>
+            <th>グラフ②　JPY実質</th>
+            <th>差の主な理由</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="3">日経225<span class="td-sub">配当込み</span></td>
+            <td>1989年（バブルピーク）</td>
+            <td class="num-cell">約410倍</td>
+            <td class="num-cell">約105倍</td>
+            <td>円高（1ドル360円→143円）で増幅</td>
+          </tr>
+          <tr>
+            <td>2003年（底値）</td>
+            <td class="num-cell">約112倍</td>
+            <td class="num-cell">約26倍</td>
+            <td>円安進行でギャップが縮小</td>
+          </tr>
+          <tr>
+            <td>2050年（将来予測）</td>
+            <td class="num-cell">約654倍</td>
+            <td class="num-cell">約347倍</td>
+            <td>FXメインリバージョン反映（円高回帰）</td>
+          </tr>
+          <tr class="row-sep">
+            <td rowspan="3">10年JGB<span class="td-sub">国債・TR</span></td>
+            <td>1970年代</td>
+            <td class="num-cell">緩やかに上昇</td>
+            <td class="num-cell red-cell">0.74まで下落</td>
+            <td>高インフレで実質価値が目減り</td>
+          </tr>
+          <tr>
+            <td>1985〜1990年</td>
+            <td class="num-cell">12.5→18.5倍</td>
+            <td class="num-cell">1.18→1.75倍</td>
+            <td>プラザ合意後の急激な円高</td>
+          </tr>
+          <tr>
+            <td>2022年</td>
+            <td class="num-cell red-cell">約12.5倍（急落）</td>
+            <td class="num-cell">約4.75倍</td>
+            <td>アベノミクス円安（80円→135円）</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>まとめると、<strong>USD実質グラフは「アメリカ人が日本に投資したらどうなったか」</strong>、<strong>JPY実質グラフは「日本人が日本に投資したらどうなったか」</strong>を表しています。2つを並べて読むことで、<strong>為替が長期リターンにいかに大きな影響を与えるか</strong>が実感できます。日本株が「世界最強の資産」に見えた時代も、「失われた30年」に見えた時代も、どちらの側から見るかで景色はまるで変わるのです。</p>
+    </div>
+  </section>
+
+  <!-- SECTION: 予測方法論 -->
+  <section class="block" id="forecast-methodology">
+    <div class="section-head">
+      <div class="section-num">Appendix</div>
+      <div>
+        <h2 class="section-title">
+          2026〜2050年 予測の考え方
+          <span class="section-title-en">How the 2026–2050 Projections Were Constructed</span>
+        </h2>
+      </div>
+    </div>
+
+    <div class="article">
+      <p>グラフの2026年以降は、<strong>「現在の理解に基づく中央値シナリオ」</strong>として構築した予測値です。200年の実績データとは異なり、将来の確定値ではありません。主要機関（Vanguard・JPMorgan・BlackRock）の長期資本市場前提と、シーゲル教授自身の最新見通しをもとに、以下3点の調整を加えています。</p>
+
+      <h3 class="subsection-title">① 米国株式：高バリュエーションからの段階的収束</h3>
+      <p>2026年時点のCAPE（シラーPER）は約37と、過去40年で上位10%に入る水準にあります。バリュエーションが高いほど、その後10年の期待リターンは統計的に低くなる傾向があります。そこで2026〜2030年は実質3.5%と控えめな出発点をとり、その後は徐々にシーゲル教授が長期データで確認した「株式の実質CAGR約6.7%」に向けて収束する<strong>テーパード予測</strong>を採用しました。Vanguardの10年予測（名目4〜5%）とJPMorganの予測（名目6.7%）がそれぞれ短期・長期の参照点となっています。</p>
+
+      <h3 class="subsection-title">② 日本株式・JGB：BoJ正常化と企業改革の追い風</h3>
+      <p>東証のガバナンス改革（資本コスト経営の要請）とFSA改革は、日本企業のROE向上と株主還元拡大を後押しし、BlackRockやInvescoは日本株に対して構造的な再評価を見込んでいます。一方、日本銀行は超低金利政策からの正常化サイクルに入っており、10年JGB利回りはすでに約2.4%に達しています。これを反映し、JGBの実質リターンは2026〜2030年の0.5%から段階的に1.5%へ収束するシナリオを採用しました。1990年代後半以降の超低金利状態を2050年まで延長する旧来の仮定を修正したものです。</p>
+
+      <h3 class="subsection-title">③ 円の実質実効為替レート（REER）回帰</h3>
+      <p>2025年時点の円の実質実効為替レートは、変動相場制移行（1973年）以降の最低水準近傍にあり、購買力平価（PPP）から大幅に乖離しています。1ドル＝360円の固定相場時代と同水準まで円の購買力が低下しているという見方もあります。この歴史的な割安状態からの<strong>長期的な部分回復</strong>を想定し、2030年代以降は年率0.5%程度の緩やかな円高方向への調整を織り込みました。これにより、USD実質で見た日本資産のリターンは、円建てリターンをわずかに上回る水準になります。</p>
+
+      <p class="note-small">本予測は教育・参考目的のシミュレーションです。地政学リスク、AIの生産性効果、日本の財政動向など予測を大きく変えうる要因が複数存在します。投資判断の根拠として利用することは推奨しません。参考文献：Vanguard Capital Markets Model® (2026)、JPMorgan LTCMA (2026)、BlackRock CMA (2026)、WisdomTree Siegel Weekly Commentary (2026年4月)。</p>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer class="foot">
     <div class="foot-inner">
@@ -738,4 +891,19 @@
           <li>
             <span class="yr">—</span>
             <span class="ttl">
-            
+              WisdomTree, Siegel &amp; Jeremy Schwartz
+              <span class="auth">WisdomTree Investments ／ Research Paper</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <div class="foot-base">
+    <span>© 2026 長期投資の王道 — Siegel Long Term</span>
+    <span>Data: Jeremy J. Siegel, Stocks for the Long Run (6th ed.)</span>
+  </div>
+
+</body>
+</html>

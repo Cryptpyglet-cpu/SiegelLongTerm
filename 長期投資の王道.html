@@ -570,6 +570,8 @@
     .chart-placeholder { aspect-ratio: 3 / 4; }
     .chart-foot { gap: 20px; }
   }
+  .subsection-title{font-size:1rem;font-weight:500;color:var(--ink);margin:1.6rem 0 0.5rem;letter-spacing:0.01em}
+  .note-small{font-size:0.78rem;color:var(--ink-muted);line-height:1.65;margin-top:1.5rem;padding:0.75rem 1rem;border-left:2px solid var(--rule);background:var(--paper-tint, #faf9f7)}
 </style>
 </head>
 <body>
@@ -801,9 +803,9 @@
           </tr>
           <tr>
             <td>2050年（将来予測）</td>
-            <td class="num-cell">約610倍</td>
-            <td class="num-cell">約710倍</td>
-            <td>長期円安が続くと想定し逆転</td>
+            <td class="num-cell">約654倍</td>
+            <td class="num-cell">約347倍</td>
+            <td>FXメインリバージョン反映（円高回帰）</td>
           </tr>
           <tr class="row-sep">
             <td rowspan="3">10年JGB<span class="td-sub">国債・TR</span></td>
@@ -828,6 +830,34 @@
       </table>
 
       <p>まとめると、<strong>USD実質グラフは「アメリカ人が日本に投資したらどうなったか」</strong>、<strong>JPY実質グラフは「日本人が日本に投資したらどうなったか」</strong>を表しています。2つを並べて読むことで、<strong>為替が長期リターンにいかに大きな影響を与えるか</strong>が実感できます。日本株が「世界最強の資産」に見えた時代も、「失われた30年」に見えた時代も、どちらの側から見るかで景色はまるで変わるのです。</p>
+    </div>
+  </section>
+
+  <!-- SECTION: 予測方法論 -->
+  <section class="block" id="forecast-methodology">
+    <div class="section-head">
+      <div class="section-num">Appendix</div>
+      <div>
+        <h2 class="section-title">
+          2026〜2050年 予測の考え方
+          <span class="section-title-en">How the 2026–2050 Projections Were Constructed</span>
+        </h2>
+      </div>
+    </div>
+
+    <div class="article">
+      <p>グラフの2026年以降は、<strong>「現在の理解に基づく中央値シナリオ」</strong>として構築した予測値です。200年の実績データとは異なり、将来の確定値ではありません。主要機関（Vanguard・JPMorgan・BlackRock）の長期資本市場前提と、シーゲル教授自身の最新見通しをもとに、以下3点の調整を加えています。</p>
+
+      <h3 class="subsection-title">① 米国株式：高バリュエーションからの段階的収束</h3>
+      <p>2026年時点のCAPE（シラーPER）は約37と、過去40年で上位10%に入る水準にあります。バリュエーションが高いほど、その後10年の期待リターンは統計的に低くなる傾向があります。そこで2026〜2030年は実質3.5%と控えめな出発点をとり、その後は徐々にシーゲル教授が長期データで確認した「株式の実質CAGR約6.7%」に向けて収束する<strong>テーパード予測</strong>を採用しました。Vanguardの10年予測（名目4〜5%）とJPMorganの予測（名目6.7%）がそれぞれ短期・長期の参照点となっています。</p>
+
+      <h3 class="subsection-title">② 日本株式・JGB：BoJ正常化と企業改革の追い風</h3>
+      <p>東証のガバナンス改革（資本コスト経営の要請）とFSA改革は、日本企業のROE向上と株主還元拡大を後押しし、BlackRockやInvescoは日本株に対して構造的な再評価を見込んでいます。一方、日本銀行は超低金利政策からの正常化サイクルに入っており、10年JGB利回りはすでに約2.4%に達しています。これを反映し、JGBの実質リターンは2026〜2030年の0.5%から段階的に1.5%へ収束するシナリオを採用しました。1990年代後半以降の超低金利状態を2050年まで延長する旧来の仮定を修正したものです。</p>
+
+      <h3 class="subsection-title">③ 円の実質実効為替レート（REER）回帰</h3>
+      <p>2025年時点の円の実質実効為替レートは、変動相場制移行（1973年）以降の最低水準近傍にあり、購買力平価（PPP）から大幅に乖離しています。1ドル＝360円の固定相場時代と同水準まで円の購買力が低下しているという見方もあります。この歴史的な割安状態からの<strong>長期的な部分回復</strong>を想定し、2030年代以降は年率0.5%程度の緩やかな円高方向への調整を織り込みました。これにより、USD実質で見た日本資産のリターンは、円建てリターンをわずかに上回る水準になります。</p>
+
+      <p class="note-small">本予測は教育・参考目的のシミュレーションです。地政学リスク、AIの生産性効果、日本の財政動向など予測を大きく変えうる要因が複数存在します。投資判断の根拠として利用することは推奨しません。参考文献：Vanguard Capital Markets Model® (2026)、JPMorgan LTCMA (2026)、BlackRock CMA (2026)、WisdomTree Siegel Weekly Commentary (2026年4月)。</p>
     </div>
   </section>
 
