@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>シーゲル教授チャート（USD実質）</title>
+<script src="chart.umd.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:100%;background:#fff;font-family:"Hiragino Sans","Yu Gothic","Meiryo",sans-serif;font-size:13px;color:#222;overflow:hidden}
+  .wrap{display:flex;flex-direction:column;height:100%;padding:10px 16px 8px;gap:5px}
+  h2{font-size:13.5px;font-weight:bold;color:#111}
+  .controls{display:flex;flex-direction:column;gap:3px}
+  .ctrl-row{display:flex;align-items:center;gap:8px;font-size:12px}
+  .ctrl-row label{width:80px;flex-shrink:0;color:#444}
+  .ctrl-row input[type=range]{flex:1;accent-color:#3a6fd8;cursor:pointer}
+  .year-val{font-weight:bold;color:#e03030;min-width:36px}
+  .chart-subtitle{text-align:center;font-size:11px;color:#555}
+  .legend-wrap{display:flex;flex-wrap:wrap;gap:4px 12px;justify-content:center}
+  .leg{display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;padding:2px 6px;border-radius:3px;user-select:none;transition:opacity .15s}
+  .leg:hover{background:#f0f0f0}
+  .leg.hidden{opacity:.3;text-decoration:line-through}
+  .leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .chart-area{flex:1;position:relative;min-height:0}
+  canvas{position:absolute;inset:0;width:100%!important;height:100%!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h2>シーゲル教授チャート（1950–2050）＋ 日本円・日経225・10年JGB</h2>
+  <div class="controls">
+    <div class="ctrl-row">
+      <label>表示開始年：</label>
+      <input type="range" id="startSlider" min="1950" max="2049" value="1950" step="1">
+      <span class="year-val" id="startLabel">1950</span>
+    </div>
+    <div class="ctrl-row">
+      <label>表示終端年：</label>
+      <input type="range" id="endSlider" min="1951" max="2050" value="2050" step="1">
+      <span class="year-val" id="endLabel">2050</span>
+    </div>
+  </div>
+  <div class="chart-subtitle">実質総合リターン指数（開始年=$1 に再ベース, 1950年USD購買力ベース）　※凡例クリックで表示切替</div>
+  <div class="legend-wrap" id="legend"></div>
+  <div class="chart-area"><canvas id="chart"></canvas></div>
+</div>
+<script>
+// ── マイルストーン→年次データ（対数線形補間）─────────────────
+function makeSeries(ms) {
+  const out = [];
+  for (let y = 1950; y <= 2050; y++) {
+    if (y <= ms[0][0])           { out.push(ms[0][1]); continue; }
+    if (y >= ms[ms.length-1][0]) { out.push(ms[ms.length-1][1]); continue; }
+    let lo = ms[0], hi = ms[ms.length-1];
+    for (let i = 0; i < ms.length-1; i++) {
+      if (ms[i][0] <= y && ms[i+1][0] >= y) { lo=ms[i]; hi=ms[i+1]; break; }
+    }
+    const t = (y-lo[0])/(hi[0]-lo[0]);
+    out.push(parseFloat(Math.exp(Math.log(lo[1]) + t*(Math.log(hi[1])-Math.log(lo[1]))).toFixed(5)));
+  }
+  return out;
+}
+
+// ── 各資産マイルストーン（全て 1950 USD実質, 1950=$1）─────────
+const MS = {
+  usSt:  [[1950,1.0],[1955,2.0],[1960,3.0],[1965,4.5],[1970,3.9],[1973,2.8],[1975,3.5],[1980,4.2],[1987,7.5],[1989,10.5],[1990,10.0],[1995,17.0],[2000,32.0],[2002,21.0],[2007,37.5],[2009,22.0],[2015,57.0],[2020,105.0],[2022,82.0],[2030,120.0],[2040,175.0],[2050,235.0]],
+  usLtb: [[1950,1.0],[1960,0.93],[1970,0.82],[1975,0.65],[1980,0.55],[1982,0.62],[1985,0.95],[1990,1.45],[1995,2.15],[2000,3.30],[2005,4.20],[2010,6.60],[2015,8.20],[2020,11.2],[2022,7.5],[2030,8.5],[2040,9.8],[2050,11.5]],
+  usTb:  [[1950,1.0],[1960,1.01],[1970,0.96],[1975,0.86],[1980,0.92],[1985,1.08],[1990,1.18],[1995,1.30],[2000,1.48],[2005,1.58],[2010,1.50],[2015,1.47],[2020,1.44],[2022,1.42],[2030,1.52],[2040,1.60],[2050,1.68]],
+  gold:  [[1950,1.0],[1960,0.96],[1971,0.95],[1972,1.22],[1975,2.55],[1980,5.60],[1982,3.80],[1985,3.20],[1990,2.60],[1995,2.10],[2000,1.80],[2002,2.15],[2005,3.30],[2008,5.60],[2012,8.10],[2015,5.90],[2020,8.60],[2022,8.10],[2030,9.1],[2040,10.0],[2050,10.8]],
+  usDl:  [[1950,1.0],[1960,0.78],[1970,0.61],[1975,0.47],[1980,0.33],[1985,0.25],[1990,0.20],[1995,0.17],[2000,0.14],[2005,0.11],[2010,0.093],[2015,0.082],[2020,0.070],[2022,0.054],[2030,0.044],[2040,0.034],[2050,0.026]],
+  jpYen: [[1950,1.0],[1955,0.93],[1960,0.79],[1965,0.70],[1970,0.62],[1971,0.70],[1975,0.56],[1980,0.54],[1985,0.38],[1987,0.60],[1990,0.54],[1995,0.72],[2000,0.55],[2005,0.47],[2010,0.52],[2012,0.53],[2015,0.34],[2020,0.35],[2022,0.25],[2030,0.22],[2040,0.17],[2050,0.14]],
+  nk225: [[1950,1.0],[1955,3.5],[1960,7.2],[1965,9.8],[1970,15.5],[1975,22.5],[1980,36.0],[1985,52.0],[1987,122.0],[1989,410.0],[1990,285.0],[1992,180.0],[1995,192.0],[1998,158.0],[2000,192.0],[2003,112.0],[2007,195.0],[2009,118.0],[2012,142.0],[2015,148.0],[2018,205.0],[2020,188.0],[2022,172.0],[2030,262.0],[2040,415.0],[2050,610.0]],
+  jgb:   [[1950,1.0],[1960,1.22],[1970,1.82],[1975,2.85],[1980,4.60],[1985,12.5],[1990,18.5],[1995,22.5],[2000,21.5],[2005,20.5],[2010,22.5],[2015,17.5],[2020,18.5],[2022,12.5],[2030,9.8],[2040,7.2],[2050,5.8]]
+};
+
+const SERIES_DEF = [
+  {key:'usSt',  label:'米国株式',         color:'#cc2222'},
+  {key:'usLtb', label:'米国長期債',        color:'#3366cc'},
+  {key:'usTb',  label:'米国T-bill',       color:'#229944'},
+  {key:'gold',  label:'金',               color:'#bb9900'},
+  {key:'usDl',  label:'米ドル(現金)',     color:'#888888'},
+  {key:'jpYen', label:'日本円(現金)',     color:'#dd66aa'},
+  {key:'nk225', label:'日経225(配当込み)', color:'#ff22bb'},
+  {key:'jgb',   label:'10年JGB(TR)',      color:'#119988'},
+];
+
+const allYears = Array.from({length:101}, (_,i)=>1950+i);
+const rawData  = SERIES_DEF.map(d => makeSeries(MS[d.key]));
+const hidden   = new Set();
+
+// ── 開始年を $1 に再ベースしたスライスを返す ────────────────
+function getSlice(sy, ey) {
+  const si = sy-1950, ei = ey-1950+1;
+  return rawData.map(series => {
+    const base = series[si] || 1;
+    return series.slice(si, ei).map(v => parseFloat((v/base).toFixed(6)));
+  });
+}
+
+// ── Chart 初期化 ────────────────────────────────────────
+let sy=1950, ey=2050;
+const initSlices = getSlice(sy, ey);
+
+const ctx = document.getElementById('chart').getContext('2d');
+const myChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: allYears.slice(0,101),
+    datasets: SERIES_DEF.map((d,i)=>({
+      label: d.label,
+      data: initSlices[i],
+      borderColor: d.color,
+      backgroundColor: d.color,
+      borderWidth: i===6 ? 2.2 : 1.8,
+      pointRadius: 2,
+      pointHoverRadius: 5,
+      tension: 0.2,
+      fill: false,
+      hidden: false,
+    }))
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: {duration:200},
+    plugins: {
+      legend: {display:false},
+      tooltip: {
+        mode:'index', intersect:false,
+        backgroundColor:'rgba(20,20,20,0.92)', titleColor:'#fff', bodyColor:'#ddd',
+        padding:10, bodyFont:{size:11},
+        callbacks: {
+          label: c => {
+            if(hidden.has(c.datasetIndex)) return null;
+            const v = c.raw;
+            const f = v>=100?'$'+v.toFixed(1) : v>=10?'$'+v.toFixed(2) : v>=1?'$'+v.toFixed(3) : '$'+v.toFixed(4);
+            return '  '+c.dataset.label+':  '+f;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks:{color:'#555', font:{size:10}, maxTicksLimit:11, maxRotation:0},
+        grid:{color:'rgba(0,0,0,0.07)'}, border:{color:'#bbb'}
+      },
+      y: {
+        type:'logarithmic',
+        title:{display:true, text:'$1 の実質購買力（開始年=$1）', color:'#555', font:{size:10}},
+        ticks:{
+          color:'#555', font:{size:9.5},
+          callback: v => {
+            const marks=[0.02,0.04,0.06,0.08,0.1,0.2,0.4,0.6,1,2,4,6,10,20,40,60,100,200,400,600,1000];
+            if(marks.some(m=>Math.abs(v-m)/m<0.02)) return v>=1?'$'+v:'$'+v.toFixed(2);
+            return '';
+          }
+        },
+        grid:{color:'rgba(0,0,0,0.07)'}, border:{color:'#bbb'}
+      }
+    }
+  }
+});
+
+// ── 凡例（クリックで表示切替）─────────────────────────────
+const legWrap = document.getElementById('legend');
+SERIES_DEF.forEach((d,i)=>{
+  const el = document.createElement('div');
+  el.className = 'leg';
+  el.innerHTML = `<div class="leg-dot" style="background:${d.color}"></div>${d.label}`;
+  el.addEventListener('click', ()=>{
+    if(hidden.has(i)) hidden.delete(i); else hidden.add(i);
+    el.classList.toggle('hidden', hidden.has(i));
+    myChart.data.datasets[i].hidden = hidden.has(i);
+    myChart.update('none');
+  });
+  legWrap.appendChild(el);
+});
+
+// ── スライダー（左端を $1 に再ベース）──────────────────────
+function refreshChart() {
+  const si=sy-1950, ei=ey-1950+1;
+  const slices = getSlice(sy, ey);
+  myChart.data.labels = allYears.slice(si, ei);
+  SERIES_DEF.forEach((_,i)=>{
+    myChart.data.datasets[i].data   = slices[i];
+    myChart.data.datasets[i].hidden = hidden.has(i);
+  });
+  myChart.update('none');
+}
+
+document.getElementById('startSlider').addEventListener('input', e=>{
+  sy = parseInt(e.target.value);
+  if(sy >= ey){ sy=ey-1; e.target.value=sy; }
+  document.getElementById('startLabel').textContent = sy;
+  refreshChart();
+});
+document.getElementById('endSlider').addEventListener('input', e=>{
+  ey = parseInt(e.target.value);
+  if(ey <= sy){ ey=sy+1; e.target.value=ey; }
+  document.getElementById('endLabel').textContent = ey;
+  refreshChart();
+});
+</script>
+</body>
+</html>
