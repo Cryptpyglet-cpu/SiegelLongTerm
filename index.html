@@ -3,203 +3,744 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>シーゲル教授チャート（USD実質）</title>
-<script src="chart.umd.js"></script>
+<title>長期投資の王道</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{width:100%;height:100%;background:#fff;font-family:"Hiragino Sans","Yu Gothic","Meiryo",sans-serif;font-size:13px;color:#222;overflow:hidden}
-  .wrap{display:flex;flex-direction:column;height:100%;padding:10px 16px 8px;gap:5px}
-  h2{font-size:13.5px;font-weight:bold;color:#111}
-  .controls{display:flex;flex-direction:column;gap:3px}
-  .ctrl-row{display:flex;align-items:center;gap:8px;font-size:12px}
-  .ctrl-row label{width:80px;flex-shrink:0;color:#444}
-  .ctrl-row input[type=range]{flex:1;accent-color:#3a6fd8;cursor:pointer}
-  .year-val{font-weight:bold;color:#e03030;min-width:36px}
-  .chart-subtitle{text-align:center;font-size:11px;color:#555}
-  .legend-wrap{display:flex;flex-wrap:wrap;gap:4px 12px;justify-content:center}
-  .leg{display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;padding:2px 6px;border-radius:3px;user-select:none;transition:opacity .15s}
-  .leg:hover{background:#f0f0f0}
-  .leg.hidden{opacity:.3;text-decoration:line-through}
-  .leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-  .chart-area{flex:1;position:relative;min-height:0}
-  canvas{position:absolute;inset:0;width:100%!important;height:100%!important}
+  :root {
+    --bg: #faf7f0;
+    --bg-soft: #f3eee2;
+    --ink: #1a2030;
+    --ink-soft: #4a5160;
+    --ink-muted: #8a8475;
+    --rule: #d9d0bc;
+    --accent: oklch(0.62 0.09 75);   /* muted gold */
+    --accent-soft: oklch(0.92 0.04 80);
+    --serif: "Noto Serif JP", "Cormorant Garamond", serif;
+    --sans: "Noto Sans JP", system-ui, sans-serif;
+    --display: "Cormorant Garamond", "Noto Serif JP", serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 400;
+    line-height: 1.85;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ---------- TOP BAR ---------- */
+  .topbar {
+    border-bottom: 1px solid var(--rule);
+    padding: 22px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    font-family: var(--display);
+    font-weight: 500;
+  }
+  .topbar .mark {
+    color: var(--ink);
+    letter-spacing: 0.32em;
+    font-weight: 600;
+  }
+  .topbar .meta { display: flex; gap: 32px; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding: 110px 48px 90px;
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 72px;
+    align-items: end;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-bottom: 28px;
+  }
+  .hero-eyebrow::before {
+    content: "";
+    display: inline-block;
+    width: 56px;
+    height: 1px;
+    background: var(--accent);
+    vertical-align: middle;
+    margin-right: 16px;
+    transform: translateY(-3px);
+  }
+
+  h1.hero-title {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(58px, 7vw, 104px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  h1.hero-title .ja { display: block; }
+  h1.hero-title .en {
+    display: block;
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.34em;
+    color: var(--ink-soft);
+    margin-top: 28px;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-tagline {
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    font-weight: 400;
+    padding-bottom: 12px;
+    text-wrap: pretty;
+  }
+  .hero-tagline strong {
+    color: var(--ink);
+    font-weight: 600;
+    background: linear-gradient(transparent 64%, var(--accent-soft) 64%);
+    padding: 0 2px;
+  }
+
+  /* ---------- HERO IMAGE ---------- */
+  .hero-image-row {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 48px 100px;
+  }
+  .hero-image {
+    aspect-ratio: 16 / 7;
+    background: var(--bg-soft);
+    background-image:
+      repeating-linear-gradient(135deg,
+        rgba(154,140,108,0.10) 0 1px,
+        transparent 1px 14px);
+    border: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+  .photo-slot {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--ink-muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .photo-slot .num {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 28px;
+    letter-spacing: 0;
+    color: var(--ink);
+    text-transform: none;
+  }
+  .photo-slot .label { color: var(--ink-muted); }
+  .photo-slot .hint { color: var(--ink-muted); opacity: 0.7; font-size: 11px; }
+
+  /* Real photos in place — slot becomes a cover-fitted image */
+  .photo-slot.has-image { background-size: cover; background-position: center; }
+  .photo-slot.has-image > * { display: none; }
+
+  #photo-1.has-image {
+    background-image: url('uploads/tyler-prahm-lmV3gJSAgbo-unsplash.jpg');
+    background-position: center 40%;
+  }
+  #photo-2.has-image {
+    background-image: url('uploads/fabio-spano-2lHhfn7KXTw-unsplash.jpg');
+    background-position: 55% center;
+  }
+  #photo-3.has-image {
+    background-image: url('uploads/lo-lo-CeVj8lPBJSc-unsplash.jpg');
+    background-position: center 45%;
+  }
+
+  /* ---------- SECTION SCAFFOLD ---------- */
+  section.block {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 80px 48px;
+  }
+
+  .section-head {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 64px;
+    margin-bottom: 56px;
+    align-items: baseline;
+    border-top: 1px solid var(--rule);
+    padding-top: 40px;
+  }
+  .section-num {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+  }
+  .section-num .slash { color: var(--ink-muted); margin: 0 8px; opacity: 0.6; }
+  .section-num .total { color: var(--ink-muted); font-style: normal; font-size: 16px; }
+
+  .section-title {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 42px;
+    line-height: 1.2;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  .section-title-en {
+    display: block;
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 18px;
+    color: var(--ink-muted);
+    margin-top: 12px;
+    letter-spacing: 0.03em;
+  }
+
+  /* ---------- OVERVIEW ---------- */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 72px;
+    align-items: start;
+  }
+  .overview-photo {
+    aspect-ratio: 4 / 5;
+    background: var(--bg-soft);
+    background-image:
+      repeating-linear-gradient(135deg,
+        rgba(154,140,108,0.10) 0 1px,
+        transparent 1px 14px);
+    border: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+  .overview-caption {
+    margin-top: 16px;
+    font-family: var(--serif);
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink-muted);
+    font-style: italic;
+    max-width: 360px;
+  }
+  .overview-text {
+    padding-top: 8px;
+  }
+  .overview-text p {
+    font-size: 17px;
+    line-height: 2;
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+    text-wrap: pretty;
+  }
+  .pull-quote {
+    font-family: var(--serif);
+    font-size: 26px;
+    line-height: 1.6;
+    color: var(--ink);
+    font-weight: 500;
+    border-left: 2px solid var(--accent);
+    padding: 8px 0 8px 28px;
+    margin: 36px 0 32px;
+    text-wrap: balance;
+  }
+  .pull-quote-attr {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-muted);
+    margin-top: 14px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ---------- ARTICLE / EXPLANATION ---------- */
+  .article {
+    max-width: 760px;
+    margin: 0 auto;
+    padding-top: 8px;
+  }
+  .article p {
+    font-size: 17px;
+    line-height: 2.05;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+    text-wrap: pretty;
+  }
+  .article h3 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 26px;
+    color: var(--ink);
+    margin: 48px 0 22px;
+    line-height: 1.4;
+    letter-spacing: -0.005em;
+  }
+  .article h3 .ord {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+    margin-right: 14px;
+    font-size: 0.85em;
+  }
+  .article p:first-of-type::first-letter {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 4.4em;
+    float: left;
+    line-height: 0.92;
+    margin: 6px 14px 0 0;
+    color: var(--ink);
+  }
+  .article strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .inline-photo-row {
+    margin: 64px 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .inline-photo {
+    aspect-ratio: 16 / 9;
+    background: var(--bg-soft);
+    background-image:
+      repeating-linear-gradient(135deg,
+        rgba(154,140,108,0.10) 0 1px,
+        transparent 1px 14px);
+    border: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+  .inline-caption {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin-top: 14px;
+    line-height: 1.7;
+    max-width: 600px;
+  }
+
+  /* ---------- GRAPH PLACEHOLDERS ---------- */
+  .chart-section {
+    background: var(--bg-soft);
+    margin-top: 60px;
+    padding: 80px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .chart-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+  .chart-meta {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 64px;
+    margin-bottom: 36px;
+    align-items: baseline;
+  }
+  .chart-label {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+  }
+  .chart-title {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 32px;
+    color: var(--ink);
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+  }
+  .chart-sub {
+    font-family: var(--serif);
+    font-size: 16px;
+    color: var(--ink-muted);
+    margin-top: 10px;
+    font-weight: 400;
+  }
+  .chart-placeholder {
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    aspect-ratio: 16 / 7;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .chart-placeholder iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+  .chart-foot {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 64px;
+  }
+  .chart-foot .source {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer.foot {
+    margin-top: 80px;
+    border-top: 1px solid var(--rule);
+    background: var(--bg);
+  }
+  .foot-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 80px 48px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+  }
+  .foot-summary {
+    font-family: var(--serif);
+    font-size: 24px;
+    line-height: 1.7;
+    color: var(--ink);
+    font-weight: 500;
+    text-wrap: pretty;
+  }
+  .foot-summary .accent { color: var(--accent); font-style: italic; font-family: var(--display); }
+  .foot-refs h4 {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-muted);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+  .foot-refs ul {
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+  .foot-refs li {
+    border-bottom: 1px solid var(--rule);
+    padding: 16px 0;
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 18px;
+    align-items: baseline;
+  }
+  .foot-refs .yr {
+    font-family: var(--display);
+    font-style: italic;
+    color: var(--accent);
+    font-size: 16px;
+  }
+  .foot-refs .ttl {
+    font-family: var(--serif);
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .foot-refs .auth {
+    display: block;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  .foot-base {
+    border-top: 1px solid var(--rule);
+    padding: 24px 48px;
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; gap: 36px; padding: 64px 28px 56px; }
+    .hero-image-row, section.block, .chart-inner, .foot-inner, .foot-base { padding-left: 28px; padding-right: 28px; }
+    .section-head, .chart-meta, .chart-foot { grid-template-columns: 1fr; gap: 14px; }
+    .overview-grid { grid-template-columns: 1fr; gap: 36px; }
+    .foot-inner { grid-template-columns: 1fr; gap: 48px; }
+    .topbar { padding: 18px 28px; flex-direction: column; gap: 8px; align-items: flex-start; }
+    .topbar .meta { gap: 18px; }
+    h1.hero-title { font-size: 56px; }
+    .section-title { font-size: 32px; }
+    .chart-title { font-size: 24px; }
+    .article p:first-of-type::first-letter { font-size: 3.6em; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h2>シーゲル教授チャート（1950–2050）＋ 日本円・日経225・10年JGB</h2>
-  <div class="controls">
-    <div class="ctrl-row">
-      <label>表示開始年：</label>
-      <input type="range" id="startSlider" min="1950" max="2049" value="1950" step="1">
-      <span class="year-val" id="startLabel">1950</span>
-    </div>
-    <div class="ctrl-row">
-      <label>表示終端年：</label>
-      <input type="range" id="endSlider" min="1951" max="2050" value="2050" step="1">
-      <span class="year-val" id="endLabel">2050</span>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="mark">SIEGEL · LONG TERM</div>
+    <div class="meta">
+      <span>Vol. 01</span>
+      <span>Equity Investing</span>
+      <span>2026 Edition</span>
     </div>
   </div>
-  <div class="chart-subtitle">実質総合リターン指数（開始年=$1 に再ベース, 1950年USD購買力ベース）　※凡例クリックで表示切替</div>
-  <div class="legend-wrap" id="legend"></div>
-  <div class="chart-area"><canvas id="chart"></canvas></div>
-</div>
-<script>
-// ── マイルストーン→年次データ（対数線形補間）─────────────────
-function makeSeries(ms) {
-  const out = [];
-  for (let y = 1950; y <= 2050; y++) {
-    if (y <= ms[0][0])           { out.push(ms[0][1]); continue; }
-    if (y >= ms[ms.length-1][0]) { out.push(ms[ms.length-1][1]); continue; }
-    let lo = ms[0], hi = ms[ms.length-1];
-    for (let i = 0; i < ms.length-1; i++) {
-      if (ms[i][0] <= y && ms[i+1][0] >= y) { lo=ms[i]; hi=ms[i+1]; break; }
-    }
-    const t = (y-lo[0])/(hi[0]-lo[0]);
-    out.push(parseFloat(Math.exp(Math.log(lo[1]) + t*(Math.log(hi[1])-Math.log(lo[1]))).toFixed(5)));
-  }
-  return out;
-}
 
-// ── 各資産マイルストーン（全て 1950 USD実質, 1950=$1）─────────
-const MS = {
-  usSt:  [[1950,1.0],[1955,2.0],[1960,3.0],[1965,4.5],[1970,3.9],[1973,2.8],[1975,3.5],[1980,4.2],[1987,7.5],[1989,10.5],[1990,10.0],[1995,17.0],[2000,32.0],[2002,21.0],[2007,37.5],[2009,22.0],[2015,57.0],[2020,105.0],[2022,82.0],[2030,120.0],[2040,175.0],[2050,235.0]],
-  usLtb: [[1950,1.0],[1960,0.93],[1970,0.82],[1975,0.65],[1980,0.55],[1982,0.62],[1985,0.95],[1990,1.45],[1995,2.15],[2000,3.30],[2005,4.20],[2010,6.60],[2015,8.20],[2020,11.2],[2022,7.5],[2030,8.5],[2040,9.8],[2050,11.5]],
-  usTb:  [[1950,1.0],[1960,1.01],[1970,0.96],[1975,0.86],[1980,0.92],[1985,1.08],[1990,1.18],[1995,1.30],[2000,1.48],[2005,1.58],[2010,1.50],[2015,1.47],[2020,1.44],[2022,1.42],[2030,1.52],[2040,1.60],[2050,1.68]],
-  gold:  [[1950,1.0],[1960,0.96],[1971,0.95],[1972,1.22],[1975,2.55],[1980,5.60],[1982,3.80],[1985,3.20],[1990,2.60],[1995,2.10],[2000,1.80],[2002,2.15],[2005,3.30],[2008,5.60],[2012,8.10],[2015,5.90],[2020,8.60],[2022,8.10],[2030,9.1],[2040,10.0],[2050,10.8]],
-  usDl:  [[1950,1.0],[1960,0.78],[1970,0.61],[1975,0.47],[1980,0.33],[1985,0.25],[1990,0.20],[1995,0.17],[2000,0.14],[2005,0.11],[2010,0.093],[2015,0.082],[2020,0.070],[2022,0.054],[2030,0.044],[2040,0.034],[2050,0.026]],
-  jpYen: [[1950,1.0],[1955,0.93],[1960,0.79],[1965,0.70],[1970,0.62],[1971,0.70],[1975,0.56],[1980,0.54],[1985,0.38],[1987,0.60],[1990,0.54],[1995,0.72],[2000,0.55],[2005,0.47],[2010,0.52],[2012,0.53],[2015,0.34],[2020,0.35],[2022,0.25],[2030,0.22],[2040,0.17],[2050,0.14]],
-  nk225: [[1950,1.0],[1955,3.5],[1960,7.2],[1965,9.8],[1970,15.5],[1975,22.5],[1980,36.0],[1985,52.0],[1987,122.0],[1989,410.0],[1990,285.0],[1992,180.0],[1995,192.0],[1998,158.0],[2000,192.0],[2003,112.0],[2007,195.0],[2009,118.0],[2012,142.0],[2015,148.0],[2018,205.0],[2020,188.0],[2022,172.0],[2030,262.0],[2040,415.0],[2050,610.0]],
-  jgb:   [[1950,1.0],[1960,1.22],[1970,1.82],[1975,2.85],[1980,4.60],[1985,12.5],[1990,18.5],[1995,22.5],[2000,21.5],[2005,20.5],[2010,22.5],[2015,17.5],[2020,18.5],[2022,12.5],[2030,9.8],[2040,7.2],[2050,5.8]]
-};
+  <!-- HERO -->
+  <header class="hero">
+    <div>
+      <div class="hero-eyebrow">A Guide to Patient Capital</div>
+      <h1 class="hero-title">
+        <span class="ja">長期投資の<br>王道</span>
+        <span class="en">— The Royal Road to Long-Term Investing</span>
+      </h1>
+    </div>
+    <p class="hero-tagline">
+      米ウォートン校のジェレミー・シーゲル教授が説く、<strong>200年のデータ</strong>に裏打ちされた資産形成の哲学。<br>
+      短期の値動きに惑わされず、<strong>「時間」を味方</strong>につけるための入門書。
+    </p>
+  </header>
 
-const SERIES_DEF = [
-  {key:'usSt',  label:'米国株式',         color:'#cc2222'},
-  {key:'usLtb', label:'米国長期債',        color:'#3366cc'},
-  {key:'usTb',  label:'米国T-bill',       color:'#229944'},
-  {key:'gold',  label:'金',               color:'#bb9900'},
-  {key:'usDl',  label:'米ドル(現金)',     color:'#888888'},
-  {key:'jpYen', label:'日本円(現金)',     color:'#dd66aa'},
-  {key:'nk225', label:'日経225(配当込み)', color:'#ff22bb'},
-  {key:'jgb',   label:'10年JGB(TR)',      color:'#119988'},
-];
+  <!-- HERO IMAGE (Photo 1) -->
+  <div class="hero-image-row">
+    <div class="hero-image">
+      <div class="photo-slot has-image" id="photo-1" role="img" aria-label="電光掲示板に映る株価ティッカー"></div>
+    </div>
+  </div>
 
-const allYears = Array.from({length:101}, (_,i)=>1950+i);
-const rawData  = SERIES_DEF.map(d => makeSeries(MS[d.key]));
-const hidden   = new Set();
+  <!-- SECTION 1 — OVERVIEW -->
+  <section class="block">
+    <div class="section-head">
+      <div class="section-num">01<span class="slash">/</span><span class="total">04</span></div>
+      <div>
+        <h2 class="section-title">
+          シーゲル教授と長期投資の考え方
+          <span class="section-title-en">Professor Siegel & the Long-Term Doctrine</span>
+        </h2>
+      </div>
+    </div>
 
-// ── 開始年を $1 に再ベースしたスライスを返す ────────────────
-function getSlice(sy, ey) {
-  const si = sy-1950, ei = ey-1950+1;
-  return rawData.map(series => {
-    const base = series[si] || 1;
-    return series.slice(si, ei).map(v => parseFloat((v/base).toFixed(6)));
-  });
-}
+    <div class="overview-grid">
+      <div>
+        <div class="overview-photo">
+          <div class="photo-slot has-image" id="photo-2" role="img" aria-label="ウォール街のチャージング・ブル像"></div>
+        </div>
+        <p class="overview-caption">
+          ニューヨーク・ウォール街のチャージング・ブル。荒々しい強気相場の象徴は、半世紀以上にわたって市場を見つめ続けるシーゲル教授の研究対象でもある。
+        </p>
+      </div>
 
-// ── Chart 初期化 ────────────────────────────────────────
-let sy=1950, ey=2050;
-const initSlices = getSlice(sy, ey);
+      <div class="overview-text">
+        <p>
+          ジェレミー・シーゲル教授は、米国ウォートン校で長く金融論を講じてきた研究者であり、長期投資の世界で最も影響力のある声のひとりです。代表作『株式投資（Stocks for the Long Run）』は1994年の初版以来、版を重ね、世界中の投資家に読まれてきました。
+        </p>
+        <p>
+          彼の主張はシンプルです。<strong>200年を超える米国市場のデータを丁寧にたどると、株式は債券・国債・金・現金のいずれをも大きく上回るリターンを生み出してきた</strong>——というものです。短期では激しく揺れる株式も、十分に長い時間軸で見れば、もっとも信頼できる「実物資産」として機能してきました。
+        </p>
 
-const ctx = document.getElementById('chart').getContext('2d');
-const myChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: allYears.slice(0,101),
-    datasets: SERIES_DEF.map((d,i)=>({
-      label: d.label,
-      data: initSlices[i],
-      borderColor: d.color,
-      backgroundColor: d.color,
-      borderWidth: i===6 ? 2.2 : 1.8,
-      pointRadius: 2,
-      pointHoverRadius: 5,
-      tension: 0.2,
-      fill: false,
-      hidden: false,
-    }))
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    animation: {duration:200},
-    plugins: {
-      legend: {display:false},
-      tooltip: {
-        mode:'index', intersect:false,
-        backgroundColor:'rgba(20,20,20,0.92)', titleColor:'#fff', bodyColor:'#ddd',
-        padding:10, bodyFont:{size:11},
-        callbacks: {
-          label: c => {
-            if(hidden.has(c.datasetIndex)) return null;
-            const v = c.raw;
-            const f = v>=100?'$'+v.toFixed(1) : v>=10?'$'+v.toFixed(2) : v>=1?'$'+v.toFixed(3) : '$'+v.toFixed(4);
-            return '  '+c.dataset.label+':  '+f;
-          }
-        }
-      }
-    },
-    scales: {
-      x: {
-        ticks:{color:'#555', font:{size:10}, maxTicksLimit:11, maxRotation:0},
-        grid:{color:'rgba(0,0,0,0.07)'}, border:{color:'#bbb'}
-      },
-      y: {
-        type:'logarithmic',
-        title:{display:true, text:'$1 の実質購買力（開始年=$1）', color:'#555', font:{size:10}},
-        ticks:{
-          color:'#555', font:{size:9.5},
-          callback: v => {
-            const marks=[0.02,0.04,0.06,0.08,0.1,0.2,0.4,0.6,1,2,4,6,10,20,40,60,100,200,400,600,1000];
-            if(marks.some(m=>Math.abs(v-m)/m<0.02)) return v>=1?'$'+v:'$'+v.toFixed(2);
-            return '';
-          }
-        },
-        grid:{color:'rgba(0,0,0,0.07)'}, border:{color:'#bbb'}
-      }
-    }
-  }
-});
+        <div class="pull-quote">
+          短期の株式は危険な賭けに見えるが、長期では最も安全な資産になる。
+          <div class="pull-quote-attr">— Jeremy J. Siegel</div>
+        </div>
 
-// ── 凡例（クリックで表示切替）─────────────────────────────
-const legWrap = document.getElementById('legend');
-SERIES_DEF.forEach((d,i)=>{
-  const el = document.createElement('div');
-  el.className = 'leg';
-  el.innerHTML = `<div class="leg-dot" style="background:${d.color}"></div>${d.label}`;
-  el.addEventListener('click', ()=>{
-    if(hidden.has(i)) hidden.delete(i); else hidden.add(i);
-    el.classList.toggle('hidden', hidden.has(i));
-    myChart.data.datasets[i].hidden = hidden.has(i);
-    myChart.update('none');
-  });
-  legWrap.appendChild(el);
-});
+        <p>
+          本ページでは、その思想の核となる考え方を、投資をはじめたばかりの方にもわかりやすく整理します。難しい数式や専門用語は最小限にとどめ、なぜ「長く持つこと」が結果として最も合理的な戦略になるのか——その理屈を、ひとつずつ確かめていきます。
+        </p>
+      </div>
+    </div>
+  </section>
 
-// ── スライダー（左端を $1 に再ベース）──────────────────────
-function refreshChart() {
-  const si=sy-1950, ei=ey-1950+1;
-  const slices = getSlice(sy, ey);
-  myChart.data.labels = allYears.slice(si, ei);
-  SERIES_DEF.forEach((_,i)=>{
-    myChart.data.datasets[i].data   = slices[i];
-    myChart.data.datasets[i].hidden = hidden.has(i);
-  });
-  myChart.update('none');
-}
+  <!-- SECTION 2 — EXPLANATION ARTICLE -->
+  <section class="block">
+    <div class="section-head">
+      <div class="section-num">02<span class="slash">/</span><span class="total">04</span></div>
+      <div>
+        <h2 class="section-title">
+          長期投資、四つの原則
+          <span class="section-title-en">Four Principles of Patient Investing</span>
+        </h2>
+      </div>
+    </div>
 
-document.getElementById('startSlider').addEventListener('input', e=>{
-  sy = parseInt(e.target.value);
-  if(sy >= ey){ sy=ey-1; e.target.value=sy; }
-  document.getElementById('startLabel').textContent = sy;
-  refreshChart();
-});
-document.getElementById('endSlider').addEventListener('input', e=>{
-  ey = parseInt(e.target.value);
-  if(ey <= sy){ ey=sy+1; e.target.value=ey; }
-  document.getElementById('endLabel').textContent = ey;
-  refreshChart();
-});
-</script>
+    <article class="article">
+      <p>
+        長期投資とは、十年、二十年、ときに半生にわたって資産を市場に置き続ける営みです。日々のニュースに反応するのではなく、企業の利益が積み重なる時間そのものを味方にする——それがシーゲル教授の説く「王道」の出発点です。ここでは、初心者がまず押さえておきたい四つの原則を順に見ていきます。
+      </p>
+
+      <h3><span class="ord">i.</span>株式は、長く持つほど安全になる</h3>
+      <p>
+        多くの人が抱く「株式＝危険、債券＝安全」というイメージは、実は短い時間軸でしか成立しません。シーゲル教授がまとめたデータでは、保有期間が1年なら株式の値動き幅は債券より大きいものの、<strong>20年、30年と伸ばすにつれて株式のばらつきは急速に縮まり、インフレ調整後のリターンでは債券を安定的に上回ってきた</strong>とされます。時間は、株式にとって最大の友です。
+      </p>
+
+      <h3><span class="ord">ii.</span>インフレに勝てるのは「実物の利益」</h3>
+      <p>
+        現金は安心に見えて、物価が上がれば購買力を失います。債券もまた、想定外のインフレに弱い資産です。一方、株式の背後にあるのは、生産設備・ブランド・人材といった<strong>実体ある事業</strong>。値段が上がれば売値も上がり、企業はインフレを価格に転嫁することで利益を維持してきました。長期で資産を守るとは、結局のところ「働く資本」を持ち続けることに他なりません。
+      </p>
+
+      <h3><span class="ord">iii.</span>分散と再投資が複利を育てる</h3>
+      <p>
+        個別銘柄の選定は、初心者にとって難しいだけでなく、リターンを底上げするとは限りません。シーゲル教授が一貫して勧めるのは、<strong>世界に広く分散されたインデックス投資と、配当の再投資</strong>です。配当を取り崩さず、もう一度株式に戻すこと。この単純な行為が、数十年単位で見ると総リターンの半分以上を生み出すことが、過去のデータから示されています。
+      </p>
+
+      <h3><span class="ord">iv.</span>市場のタイミングを計らない</h3>
+      <p>
+        「いつ買うか、いつ売るか」を当て続けるのは、専門家でさえ困難です。市場が大きく上昇する日は、しばしば下落の直後にやってきます。それを取り逃すと、長期リターンは大きく目減りします。だからこそシーゲル教授は、<strong>市場に居続けること（time in the market）</strong>こそが、タイミングを計ること（timing the market）に勝ると説きます。投資の「上手さ」よりも、「続けられる仕組み」をつくることのほうが、ずっと重要なのです。
+      </p>
+    </article>
+
+    <!-- INLINE PHOTO 3 -->
+    <div class="inline-photo-row">
+      <div class="inline-photo">
+        <div class="photo-slot has-image" id="photo-3" role="img" aria-label="ウォール街の標識"></div>
+      </div>
+      <p class="inline-caption">
+        市場は短期では振り子のように揺れるが、長い目で見れば、その振幅は経済成長という大きな潮流のなかに静かに収束していく。
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 3 — CHART 1 -->
+  <section class="chart-section">
+    <div class="chart-inner">
+      <div class="chart-meta">
+        <div class="chart-label">Figure 01 — USD</div>
+        <div>
+          <h3 class="chart-title">米国・主要資産クラスの実質累積リターン</h3>
+          <p class="chart-sub">1802年に $1 を投資した場合の実質価値推移（株式・長期国債・短期国債・金・ドル購買力、対数スケール）</p>
+        </div>
+      </div>
+
+      <!-- ▼▼▼ DYNAMIC CHART INJECTION POINT #1 ▼▼▼ -->
+      <div class="chart-placeholder" id="chart-1" data-chart="long-term-returns">
+        <iframe src="chart_usd.html" title="長期資産リターン比較（米国・USD実質）" loading="lazy"></iframe>
+      </div>
+      <!-- ▲▲▲ END CHART #1 ▲▲▲ -->
+
+      <div class="chart-foot">
+        <div></div>
+        <div class="source">
+          出典：Jeremy J. Siegel, “Stocks for the Long Run”（第6版, 2022）より推計 ／ インフレ調整済み実質値 ／ 株式CAGR 6.7%、長期国債 3.6%、短期国債 2.7%、金 0.7%
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4 — CHART 2 -->
+  <section class="chart-section" style="margin-top:0; border-top:0;">
+    <div class="chart-inner">
+      <div class="chart-meta">
+        <div class="chart-label">Figure 02 — JPY</div>
+        <div>
+          <h3 class="chart-title">日本・主要資産クラスの実質累積リターン</h3>
+          <p class="chart-sub">1950年に ¥1 を投資した場合の実質価値推移（国内株式・長期国債・短期国債・金・円購買力、対数スケール）</p>
+        </div>
+      </div>
+
+      <!-- ▼▼▼ DYNAMIC CHART INJECTION POINT #2 ▼▼▼ -->
+      <div class="chart-placeholder" id="chart-2" data-chart="holding-period-risk">
+        <iframe src="chart_jpy.html" title="長期資産リターン比較（日本・JPY実質）" loading="lazy"></iframe>
+      </div>
+      <!-- ▲▲▲ END CHART #2 ▲▲▲ -->
+
+      <div class="chart-foot">
+        <div></div>
+        <div class="source">
+          出典：日本銀行・東証・IMFデータを基に推計 ／ CPI調整済み実質値 ／ 高度成長期・バブル崩壊・アベノミクス各フェーズのリターンを反映
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="foot-inner">
+      <div class="foot-summary">
+        <span class="accent">In summary —</span><br>
+        投資の成果を決めるのは、銘柄選びの巧みさよりも、<br>
+        市場に居続ける「時間の長さ」と、<br>
+        揺れに耐える「気質」である。
+      </div>
+
+      <div class="foot-refs">
+        <h4>Further Reading</h4>
+        <ul>
+          <li>
+            <span class="yr">2022</span>
+            <span class="ttl">
+              Stocks for the Long Run（第6版）
+              <span class="auth">Jeremy J. Siegel ／ McGraw-Hill</span>
+            </span>
+          </li>
+          <li>
+            <span class="yr">2005</span>
+            <span class="ttl">
+              The Future for Investors
+              <span class="auth">Jeremy J. Siegel ／ Crown Business</span>
+            </span>
+          </li>
+          <li>
+            <span class="yr">—</span>
+            <span class="ttl">
+              The Wharton School, University of Pennsylvania
+              <span class="auth">著者所属機関 ／ 公開講義・論文</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-base">
+      <span>長期投資の王道 — Siegel Edition</span>
+      <span>本ページは教育目的の解説資料です。投資判断はご自身の責任で。</span>
+    </div>
+  </footer>
+
 </body>
 </html>
