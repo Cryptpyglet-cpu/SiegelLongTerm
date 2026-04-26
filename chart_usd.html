@@ -196,4 +196,24 @@ function refreshChart() {
   const slices = getSlice(sy, ey);
   myChart.data.labels = allYears.slice(si, ei);
   SERIES_DEF.forEach((_,i)=>{
-    myChart.data.datasets[
+    myChart.data.datasets[i].data   = slices[i];
+    myChart.data.datasets[i].hidden = hidden.has(i);
+  });
+  myChart.update('none');
+}
+
+document.getElementById('startSlider').addEventListener('input', e=>{
+  sy = parseInt(e.target.value);
+  if(sy >= ey){ sy=ey-1; e.target.value=sy; }
+  document.getElementById('startLabel').textContent = sy;
+  refreshChart();
+});
+document.getElementById('endSlider').addEventListener('input', e=>{
+  ey = parseInt(e.target.value);
+  if(ey <= sy){ ey=sy+1; e.target.value=ey; }
+  document.getElementById('endLabel').textContent = ey;
+  refreshChart();
+});
+</script>
+</body>
+</html>
