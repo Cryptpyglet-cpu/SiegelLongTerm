@@ -505,47 +505,6 @@
     letter-spacing: 0.04em;
   }
 
-  /* ---------- CHART COMPARISON TABLE ---------- */
-  .comparison-table-wrap {
-    margin: 40px 0;
-    overflow-x: auto;
-    border: 1px solid var(--rule);
-    border-radius: 2px;
-  }
-  .comparison-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    font-family: var(--sans);
-  }
-  .comparison-table thead tr {
-    background: var(--bg-soft);
-    border-bottom: 2px solid var(--rule);
-  }
-  .comparison-table th {
-    padding: 14px 18px;
-    text-align: left;
-    font-weight: 600;
-    color: var(--ink);
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .comparison-table td {
-    padding: 12px 18px;
-    border-bottom: 1px solid var(--rule);
-    color: var(--ink-soft);
-    vertical-align: middle;
-    line-height: 1.55;
-  }
-  .comparison-table tr:last-child td { border-bottom: none; }
-  .comparison-table tr.row-sep td { border-top: 2px solid var(--rule); }
-  .comparison-table td:first-child { font-weight: 600; color: var(--ink); }
-  .num-cell { font-family: var(--display); font-size: 16px; color: var(--ink); white-space: nowrap; }
-  .red-cell { color: #b03020; }
-  .td-sub { display: block; font-size: 11px; font-weight: 400; color: var(--ink-muted); margin-top: 2px; }
-
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; gap: 36px; padding: 64px 28px 56px; }
@@ -704,7 +663,7 @@
         <div class="chart-label">Figure 01 — USD</div>
         <div>
           <h3 class="chart-title">米国・主要資産クラスの実質累積リターン</h3>
-          <p class="chart-sub">1802年に $1 を投資した場合の実質価値推移（株式・長期国債・短期国債・金・ドル購買力、対数スケール）</p>
+          <p class="chart-sub">1950年に $1 を投資した場合の実質価値推移（株式・長期国債・短期国債・金・ドル購買力、対数スケール）</p>
         </div>
       </div>
 
@@ -749,88 +708,6 @@
     </div>
   </section>
 
-  <!-- SECTION: CHART COMPARISON -->
-  <section class="block" id="chart-comparison">
-    <div class="section-head">
-      <div class="section-num">Note</div>
-      <div>
-        <h2 class="section-title">
-          2つのグラフの読み方
-          <span class="section-title-en">USD Real vs. JPY Real — What the Numbers Mean</span>
-        </h2>
-      </div>
-    </div>
-
-    <div class="article">
-      <p>2つのグラフを見比べると、<strong>米国株・米国債・金など6つの系列はまったく同じ動き</strong>をしています。これらはドルで測った数字なので、どちらのグラフでも変わりません。</p>
-
-      <p>大きく違うのは<strong>日経225（日本株）と10年JGB（日本国債）の2つだけ</strong>です。なぜ違うのか、一言でいえば<strong>「円とドルの交換レート（為替）が変わったから」</strong>です。</p>
-
-      <div class="pull-quote">
-        1ドル＝360円の時代に日本株を買ったアメリカ人は、<br>株が上がっただけでなく「円高」でも得をした。<br>それが2つのグラフの差として現れている。
-        <div class="pull-quote-attr">— 為替が生み出す「見えないリターン」</div>
-      </div>
-
-      <p><strong>日経225のバブルピーク（1989年）</strong>を例に取ると、USD実質グラフでは約410倍ですが、JPY実質グラフでは約105倍です。この約4倍の差はどこから来るのでしょうか。答えはシンプルで、1950年に「1ドル＝360円」だったレートが、1989年には「1ドル＝143円」に変わったこと、つまり<strong>円が約2.5倍の価値になった</strong>からです。アメリカ人の目線では、日本株の値上がり益にプラスして「円高による換算益」も乗っかるため、数字が大きくなります。JPY実質グラフは日本のインフレ率だけで調整するので、この為替の影響は含まれません。</p>
-
-      <p><strong>10年JGB（日本国債）の差はさらに極端です。</strong>1985年時点でUSD実質は約12.5倍なのに対し、JPY実質はわずか1.18倍です。JPY実質で見ると、1970年代のオイルショック（物価が年20%以上も上がった時代）に国債の実質的な価値がじわじわと目減りしていました。USD実質では、その損失を円高の追い風が帳消しにしていたわけです。逆に2012年以降は「アベノミクス」で円安が急速に進んだ（1ドル80円台→130円超）ため、USD実質のJGBは2022年に約12.5倍まで急落しています。</p>
-
-      <table class="comparison-table-wrap">
-        <thead>
-          <tr>
-            <th>系列</th>
-            <th>時点</th>
-            <th>グラフ①　USD実質</th>
-            <th>グラフ②　JPY実質</th>
-            <th>差の主な理由</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td rowspan="3">日経225<span class="td-sub">配当込み</span></td>
-            <td>1989年（バブルピーク）</td>
-            <td class="num-cell">約410倍</td>
-            <td class="num-cell">約105倍</td>
-            <td>円高（1ドル360円→143円）で増幅</td>
-          </tr>
-          <tr>
-            <td>2003年（底値）</td>
-            <td class="num-cell">約112倍</td>
-            <td class="num-cell">約26倍</td>
-            <td>円安進行でギャップが縮小</td>
-          </tr>
-          <tr>
-            <td>2050年（将来予測）</td>
-            <td class="num-cell">約610倍</td>
-            <td class="num-cell">約710倍</td>
-            <td>長期円安が続くと想定し逆転</td>
-          </tr>
-          <tr class="row-sep">
-            <td rowspan="3">10年JGB<span class="td-sub">国債・TR</span></td>
-            <td>1970年代</td>
-            <td class="num-cell">緩やかに上昇</td>
-            <td class="num-cell red-cell">0.74まで下落</td>
-            <td>高インフレで実質価値が目減り</td>
-          </tr>
-          <tr>
-            <td>1985〜1990年</td>
-            <td class="num-cell">12.5→18.5倍</td>
-            <td class="num-cell">1.18→1.75倍</td>
-            <td>プラザ合意後の急激な円高</td>
-          </tr>
-          <tr>
-            <td>2022年</td>
-            <td class="num-cell red-cell">約12.5倍（急落）</td>
-            <td class="num-cell">約4.75倍</td>
-            <td>アベノミクス円安（80円→135円）</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <p>まとめると、<strong>USD実質グラフは「アメリカ人が日本に投資したらどうなったか」</strong>、<strong>JPY実質グラフは「日本人が日本に投資したらどうなったか」</strong>を表しています。2つを並べて読むことで、<strong>為替が長期リターンにいかに大きな影響を与えるか</strong>が実感できます。日本株が「世界最強の資産」に見えた時代も、「失われた30年」に見えた時代も、どちらの側から見るかで景色はまるで変わるのです。</p>
-    </div>
-  </section>
-
   <!-- FOOTER -->
   <footer class="foot">
     <div class="foot-inner">
@@ -861,19 +738,4 @@
           <li>
             <span class="yr">—</span>
             <span class="ttl">
-              WisdomTree, Siegel &amp; Jeremy Schwartz
-              <span class="auth">WisdomTree Investments ／ Research Paper</span>
-            </span>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </footer>
-
-  <div class="foot-base">
-    <span>© 2026 長期投資の王道 — Siegel Long Term</span>
-    <span>Data: Jeremy J. Siegel, Stocks for the Long Run (6th ed.)</span>
-  </div>
-
-</body>
-</html>
+            
