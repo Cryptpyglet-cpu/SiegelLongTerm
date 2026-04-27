@@ -125,6 +125,19 @@ window.addEventListener('load', function(){
   const ctx = canvas.getContext('2d');
   const initSlices = getSlice(sy,ey);
 
+  // 初期y軸範囲
+  function calcYBounds(slices){
+    let mn=Infinity,mx=-Infinity;
+    slices.forEach((s,i)=>{
+      if(hidden.has(i)) return;
+      s.forEach(v=>{if(v>0){mn=Math.min(mn,v);mx=Math.max(mx,v);}});
+    });
+    if(!isFinite(mn)) return {min:0.01,max:1000};
+    const pad=0.35;
+    return{min:Math.pow(10,Math.log10(mn)-pad),max:Math.pow(10,Math.log10(mx)+pad)};
+  }
+  const initBounds = calcYBounds(initSlices);
+
   const myChart = new Chart(ctx, {
     type:'line',
     data:{
@@ -170,7 +183,8 @@ window.addEventListener('load', function(){
         },
         y:{
           type:'logarithmic',
-          min:0.01,
+          min:initBounds.min,
+          max:initBounds.max,
           title:{display:true,text:'実質累積リターン（開始年=$1）',color:'#666',font:{size:10}},
           ticks:{
             color:'#555',font:{size:9},
@@ -196,6 +210,18 @@ window.addEventListener('load', function(){
       if(hidden.has(i)) hidden.delete(i); else hidden.add(i);
       el.classList.toggle('off', hidden.has(i));
       myChart.data.datasets[i].hidden=hidden.has(i);
+      // 凡例トグル後もy軸再スケール
+      const _cur=getSlice(sy,ey);
+      let _mn2=Infinity,_mx2=-Infinity;
+      _cur.forEach((s,j)=>{
+        if(hidden.has(j)) return;
+        s.forEach(v=>{if(v>0){_mn2=Math.min(_mn2,v);_mx2=Math.max(_mx2,v);}});
+      });
+      if(isFinite(_mn2)&&isFinite(_mx2)){
+        const pad=0.35;
+        myChart.options.scales.y.min=Math.pow(10,Math.log10(_mn2)-pad);
+        myChart.options.scales.y.max=Math.pow(10,Math.log10(_mx2)+pad);
+      }
       myChart.update('none');
     });
     legWrap.appendChild(el);
@@ -210,6 +236,17 @@ window.addEventListener('load', function(){
       myChart.data.datasets[i].data=slices[i];
       myChart.data.datasets[i].hidden=hidden.has(i);
     });
+    // y軸オートスケール
+    let _mn=Infinity,_mx=-Infinity;
+    slices.forEach((s,i)=>{
+      if(hidden.has(i)) return;
+      s.forEach(v=>{ if(v>0){_mn=Math.min(_mn,v);_mx=Math.max(_mx,v);} });
+    });
+    if(isFinite(_mn)&&isFinite(_mx)){
+      const pad=0.35;
+      myChart.options.scales.y.min=Math.pow(10,Math.log10(_mn)-pad);
+      myChart.options.scales.y.max=Math.pow(10,Math.log10(_mx)+pad);
+    }
     myChart.update('none');
   }
 
