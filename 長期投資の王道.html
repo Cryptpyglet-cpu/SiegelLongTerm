@@ -846,20 +846,170 @@
     </div>
 
     <div class="article">
-      <p>グラフの2026年以降は、<strong>「現在の理解に基づく中央値シナリオ」</strong>として構築した予測値です。200年の実績データとは異なり、将来の確定値ではありません。主要機関（Vanguard・JPMorgan・BlackRock）の長期資本市場前提と、シーゲル教授自身の最新見通しをもとに、以下3点の調整を加えています。</p>
+      <p>グラフの2026年以降は、<strong>「現在の理解に基づく中央値シナリオ」</strong>として構築した予測値です。200年の実績データとは異なり、将来の確定値ではありません。Vanguard・JPMorgan・BlackRockの長期資本市場前提（LTCMA）と、シーゲル教授自身の最新見通し（WisdomTree Weekly Commentary, 2026年4月）をもとに、以下3点の調整を加えています。</p>
 
-      <h3 class="subsection-title">① 米国株式：高バリュエーションからの段階的収束</h3>
-      <p>2026年時点のCAPE（シラーPER）は約37と、過去40年で上位10%に入る水準にあります。バリュエーションが高いほど、その後10年の期待リターンは統計的に低くなる傾向があります。そこで2026〜2030年は実質3.5%と控えめな出発点をとり、その後は徐々にシーゲル教授が長期データで確認した「株式の実質CAGR約6.7%」に向けて収束する<strong>テーパード予測</strong>を採用しました。Vanguardの10年予測（名目4〜5%）とJPMorganの予測（名目6.7%）がそれぞれ短期・長期の参照点となっています。</p>
+      <p>なお、グラフには5年ごとの期間別レートが<strong>正確に</strong>反映されています。2026〜2030年・2030〜2035年・…・2045〜2050年の各区間で異なる成長率を用いており、対数スケールで見ると各区間の傾き（＝成長率）が変化していることが確認できます。</p>
 
-      <h3 class="subsection-title">② 日本株式・JGB：BoJ正常化と企業改革の追い風</h3>
-      <p>東証のガバナンス改革（資本コスト経営の要請）とFSA改革は、日本企業のROE向上と株主還元拡大を後押しし、BlackRockやInvescoは日本株に対して構造的な再評価を見込んでいます。一方、日本銀行は超低金利政策からの正常化サイクルに入っており、10年JGB利回りはすでに約2.4%に達しています。これを反映し、JGBの実質リターンは2026〜2030年の0.5%から段階的に1.5%へ収束するシナリオを採用しました。1990年代後半以降の超低金利状態を2050年まで延長する旧来の仮定を修正したものです。</p>
+      <h3 class="subsection-title">期間別 実質リターン前提（5年区間）</h3>
 
-      <h3 class="subsection-title">③ 円の実質実効為替レート（REER）回帰</h3>
-      <p>2025年時点の円の実質実効為替レートは、変動相場制移行（1973年）以降の最低水準近傍にあり、購買力平価（PPP）から大幅に乖離しています。1ドル＝360円の固定相場時代と同水準まで円の購買力が低下しているという見方もあります。この歴史的な割安状態からの<strong>長期的な部分回復</strong>を想定し、2030年代以降は年率0.5%程度の緩やかな円高方向への調整を織り込みました。これにより、USD実質で見た日本資産のリターンは、円建てリターンをわずかに上回る水準になります。</p>
+      <p><strong>米国資産（USD実質・米国CPIデフレート後）</strong></p>
+      <table class="comparison-table-wrap">
+        <thead>
+          <tr>
+            <th>資産</th>
+            <th>2026-30</th>
+            <th>2030-35</th>
+            <th>2035-40</th>
+            <th>2040-45</th>
+            <th>2045-50</th>
+            <th>平均</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>米国株式</td>
+            <td class="num-cell">3.5%</td>
+            <td class="num-cell">5.0%</td>
+            <td class="num-cell">6.0%</td>
+            <td class="num-cell">6.5%</td>
+            <td class="num-cell">6.5%</td>
+            <td class="num-cell"><strong>5.5%</strong></td>
+          </tr>
+          <tr>
+            <td>米国長期債</td>
+            <td class="num-cell">2.0%</td>
+            <td class="num-cell">2.5%</td>
+            <td class="num-cell">2.5%</td>
+            <td class="num-cell">2.5%</td>
+            <td class="num-cell">2.5%</td>
+            <td class="num-cell"><strong>2.4%</strong></td>
+          </tr>
+          <tr>
+            <td>米国T-bill</td>
+            <td class="num-cell">1.0%</td>
+            <td class="num-cell">1.0%</td>
+            <td class="num-cell">1.0%</td>
+            <td class="num-cell">1.0%</td>
+            <td class="num-cell">1.0%</td>
+            <td class="num-cell"><strong>1.0%</strong></td>
+          </tr>
+          <tr>
+            <td>金</td>
+            <td class="num-cell">1.5%</td>
+            <td class="num-cell">0.5%</td>
+            <td class="num-cell">0.0%</td>
+            <td class="num-cell">0.0%</td>
+            <td class="num-cell">0.0%</td>
+            <td class="num-cell"><strong>0.4%</strong></td>
+          </tr>
+          <tr>
+            <td>米ドル現金</td>
+            <td class="num-cell red-cell">-2.5%</td>
+            <td class="num-cell red-cell">-2.5%</td>
+            <td class="num-cell red-cell">-2.5%</td>
+            <td class="num-cell red-cell">-2.5%</td>
+            <td class="num-cell red-cell">-2.5%</td>
+            <td class="num-cell red-cell"><strong>-2.5%</strong></td>
+          </tr>
+        </tbody>
+      </table>
 
-      <p class="note-small">本予測は教育・参考目的のシミュレーションです。地政学リスク、AIの生産性効果、日本の財政動向など予測を大きく変えうる要因が複数存在します。投資判断の根拠として利用することは推奨しません。参考文献：Vanguard Capital Markets Model® (2026)、JPMorgan LTCMA (2026)、BlackRock CMA (2026)、WisdomTree Siegel Weekly Commentary (2026年4月)。</p>
+      <p style="margin-top:1rem;"><strong>日本資産（JPY実質・日本CPIデフレート後）</strong></p>
+      <table class="comparison-table-wrap">
+        <thead>
+          <tr>
+            <th>資産</th>
+            <th>2026-30</th>
+            <th>2030-35</th>
+            <th>2035-40</th>
+            <th>2040-45</th>
+            <th>2045-50</th>
+            <th>平均</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>日経225 TR</td>
+            <td class="num-cell">4.5%</td>
+            <td class="num-cell">5.0%</td>
+            <td class="num-cell">5.0%</td>
+            <td class="num-cell">5.0%</td>
+            <td class="num-cell">5.0%</td>
+            <td class="num-cell"><strong>4.9%</strong></td>
+          </tr>
+          <tr>
+            <td>JGB 10年 TR</td>
+            <td class="num-cell">0.5%</td>
+            <td class="num-cell">1.5%</td>
+            <td class="num-cell">1.5%</td>
+            <td class="num-cell">1.5%</td>
+            <td class="num-cell">1.5%</td>
+            <td class="num-cell"><strong>1.3%</strong></td>
+          </tr>
+          <tr>
+            <td>日本円現金</td>
+            <td class="num-cell red-cell">-2.0%</td>
+            <td class="num-cell red-cell">-2.0%</td>
+            <td class="num-cell red-cell">-2.0%</td>
+            <td class="num-cell red-cell">-2.0%</td>
+            <td class="num-cell red-cell">-2.0%</td>
+            <td class="num-cell red-cell"><strong>-2.0%</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="subsection-title">調整①：米国株式の段階的収束（テーパード予測）</h3>
+      <p>2026年時点のCAPE（シラーPER）は約37と、過去40年で上位10%に入る高水準にあります。CAPEが高い局面では、その後10年の実質リターンが長期平均を下回る傾向が統計的に確認されており、これをそのまま予測に反映しました。</p>
+      <p>具体的には、2026〜2030年の実質リターンを<strong>3.5%</strong>（Vanguardの10年予測 名目4〜5%に相当）と保守的に設定し、その後はバリュエーションが正常化するにつれ、シーゲル教授が200年データで確認した<strong>長期平均6.7%</strong>に向けて段階的に収束させています。2040年以降は6.5%で安定する想定です。この設計により、短期のバリュエーション調整と長期の株式優位性の両立を図っています。</p>
+      <p>参照：Vanguard Capital Markets Model® (2026年3月)、JPMorgan LTCMA (2026年、名目6.7%)、シーゲル教授CNBC発言 (2025年12月29日)</p>
+
+      <h3 class="subsection-title">調整②：日本株式・JGBの政策正常化</h3>
+      <p>日本株式については、東証のガバナンス改革（資本コスト経営・自社株買いの促進）とFSA主導の企業再編が、ROE向上と株主還元拡大を後押しすると見ています。BlackRockやInvescoは日本株に対して構造的な再評価を予想しており、これを反映して円建て実質リターンを<strong>4.5〜5.0%</strong>と設定しました。</p>
+      <p>日本国債（JGB）については、日本銀行が超低金利政策からの正常化サイクルに入った点が重要です。2026年4月時点で10年JGB利回りはすでに約2.4%に達しており、日本インフレ（約1.5%）を差し引いた実質利回りは約0.9%です。ただし正常化初期（2026〜2030年）は既存債券の価格下落が実質リターンを圧迫するため、実質<strong>0.5%</strong>と低く設定。その後金利が安定化する2030年代以降は実質<strong>1.5%</strong>に収束するシナリオを採用しています。1990年代後半以降の超低金利状態を2050年まで延長する旧来の仮定を大幅に修正したものです。</p>
+      <p>参照：BlackRock CMA (2026年2月)、Invesco 2026 Investment Outlook、Trading Economics — Japan 10Y Bond Yield (2026年4月)</p>
+
+      <h3 class="subsection-title">調整③：円の実質実効為替レート（REER）回帰</h3>
+      <p>2025年時点の円の実質実効為替レート（REER）は、1973年の変動相場制移行以降の最低水準近傍にあります。これは1ドル＝360円の固定相場時代と同水準まで円の対外購買力が低下したことを意味します。購買力平価（PPP）からの乖離がこれほど大きくなった場合、歴史的には長期的な修正が生じてきました。</p>
+      <p>この歴史的な割安状態からの<strong>部分的な回帰</strong>を想定し、2030年以降は年率+0.5%程度の緩やかな円高方向への調整を織り込んでいます（2030年代末に1ドル＝150円台を想定）。これにより、USD実質で見た日本資産のリターンは、円建てリターンをわずかに上回ります。ただし財政リスクの顕在化など下振れシナリオでは、円安がさらに進む可能性もあります。</p>
+      <p>参照：Nippon.com "The Once Feared Strong Yen Is Now in Japan's National Interest"、BIS REER統計 (2025年)</p>
+
+      <h3 class="subsection-title">リスク要因（上下振れシナリオ）</h3>
+      <table class="comparison-table-wrap">
+        <thead>
+          <tr>
+            <th>リスク要因</th>
+            <th>上振れシナリオ</th>
+            <th>下振れシナリオ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>AIの生産性効果</td>
+            <td>米国実質GDP 3%成長へ加速、株式リターン上振れ</td>
+            <td>期待外れなら米国株大幅調整</td>
+          </tr>
+          <tr>
+            <td>日本デフレ再来</td>
+            <td>BoJ正常化成功でJGB正常化</td>
+            <td>失敗時はJGB実質リターンが再びマイナスへ</td>
+          </tr>
+          <tr>
+            <td>地政学リスク</td>
+            <td>米中和平・台湾安定で市場安定</td>
+            <td>台湾・中東・米中関係悪化はあらゆる予測を覆す</td>
+          </tr>
+          <tr>
+            <td>円の構造変化</td>
+            <td>REER回帰で円高加速→日本資産USD-real上振れ</td>
+            <td>財政リスク顕在化で円安継続</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="note-small">本予測は教育・参考目的のシミュレーションです。25年先の予測はグローバル経済構造・中央銀行政策・ドルの国際的地位が大きく変化する可能性があるため、確率的な予測ではなく「現在の理解に基づく中央値シナリオ」として位置づけてください。主要参考文献：Jeremy J. Siegel "Stocks for the Long Run" 第6版（McGraw-Hill, 2022）、Vanguard Capital Markets Model® (2026年3月)、JPMorgan Asset Management LTCMA (2026年)、BlackRock Investment Institute CMA (2026年2月)、WisdomTree Siegel Weekly Commentary (2026年4月20日)。</p>
     </div>
   </section>
+
 
   <!-- FOOTER -->
   <footer class="foot">
